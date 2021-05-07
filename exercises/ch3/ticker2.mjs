@@ -1,11 +1,18 @@
 import { EventEmitter } from 'events';
 
+const DivisibleBy5Error = new Error("Timestamp divisible by 5.")
+
 function ticker(num, cb) {
     const emitter = new EventEmitter();
 
     process.nextTick(() => emitter.emit('tick', -1));
 
     function recur(num, ticks, cb) {
+        if (Date.now() % 5 === 0) {
+            console.log(Date.now());
+            process.nextTick(() => emitter.emit('error', DivisibleBy5Error))
+            return cb(DivisibleBy5Error, ticks);
+        }
         if (num <= 0) {
             return cb(null, ticks);
         }
@@ -28,7 +35,8 @@ function ticker(num, cb) {
 }
 
 ticker(500, (err, ticks) => {
-    if (err) return console.error('error: ', err.message);
-    console.log(`emitted ${ticks}`);
+    if (err) console.error('error: ', err.message);
+    console.log(`call cb - emitted ${ticks}`);
 })
 .on('tick', (ticks) => console.log('tick', ticks))
+.on('error', err => console.error(err.message))
