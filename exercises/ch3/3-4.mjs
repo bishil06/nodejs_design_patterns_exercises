@@ -1,4 +1,4 @@
-import { EventEmitter, on } from 'events';
+import { EventEmitter } from 'events';
 
 function ticker(num, cb) {
     const emitter = new EventEmitter();
@@ -43,10 +43,10 @@ function ticker(num, cb) {
 
 ticker(500, (err, ticks) => {
     if (err) {
-        console.error('from callback ', err)
+        console.error('from callback ', err.toString())
     }
     else {
         console.log(`${ticks} times emitted`);
     }
 }).on('tick', (ticks) => console.log(`${ticks} tick`))
-.on('error', err => console.error('from event ', err));
+.on('error', err => console.error('from event ', err.toString()));

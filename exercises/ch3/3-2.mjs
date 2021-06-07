@@ -14,13 +14,7 @@ function ticker(num, cb) {
         }, 50)
     }
 
-    try {
-        recur(num, 0, cb);
-    }
-    catch (err) {
-        cb(err, null);
-        return emitter;
-    }
+    recur(num, 0, cb);
     
     return emitter;
 }
